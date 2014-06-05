@@ -1,0 +1,13 @@
+/wheels/
+/.htaccess
+/Application.cfc
+/build.cfm
+/index.cfm
+/IsapiRewrite4.ini
+/rewrite.cfm
+/root.cfm
+/web.config
+/config/
+/events/
+/miscellaneous/
+/models/
