@@ -1,6 +1,10 @@
 <cfcomponent extends="wheelsMapping.Test">
         
         <cffunction name="setup">
+
+			<cfif IsDefined("url.reload")>
+				<cfinclude template="../../_database.cfm">
+			</cfif>
                 
                 <!--- create an instance of our model --->
                 <cfset loc.user = model("user").new()>

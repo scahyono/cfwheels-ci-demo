@@ -14,7 +14,10 @@
 
 	<cffunction name="testKeyExistsInStructure">
 	        <cfset loc.a = {a=1, b=2, c=3}>
+	        <cfset loc.b = "b">
+	        <!---
 	        <cfset loc.b = "d">
+	        --->
 	        <cfset assert("StructKeyExists(loc.a, loc.b)")>
 	</cffunction>
 

@@ -34,7 +34,7 @@
 
         </cffunction>
 
-        <cffunction name="_blankPassword" access="private">
+        <cffunction name="blankPassword" access="private">
 
                 <cfif StructKeyExists(arguments, "password")>
                         <cfset arguments.password = "">

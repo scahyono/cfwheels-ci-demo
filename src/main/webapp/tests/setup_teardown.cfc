@@ -10,7 +10,7 @@
 
         <cffunction name="testWithSecondsBelow5Seconds">
                 <cfset loc.c = 5 - 1>
-                <cfset loc.args.toTime = DateAdd('s', c, args.fromTime)>
+                <cfset loc.args.toTime = DateAdd('s', loc.c, loc.args.fromTime)>
                 <cfinvoke method="loc.f" argumentCollection="#loc.args#" returnVariable="loc.e">
                 <cfset loc.r = "less than 5 seconds">
                 <cfset assert("loc.e eq loc.r")>

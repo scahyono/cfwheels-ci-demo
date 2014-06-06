@@ -55,8 +55,8 @@
 							<goal>download-single</goal>
 						</goals>
 						<configuration>
-							<fromFile>v${cfwheelsVersion}.zip</fromFile>
-							<url>https://github.com/cfwheels/cfwheels/archive/</url>
+							<fromFile>cfwheels.${cfwheelsVersion}.zip</fromFile>
+							<url>http://cfwheels.org/files/downloads</url>
 							<toFile>target/cfwheels.zip</toFile>
 						</configuration>
 					</execution>
@@ -115,12 +115,7 @@
 						<phase>prepare-package</phase>
 						<configuration>
 							<target>
-								<unzip src="target/cfwheels.zip" dest="target/" />
-								<move todir="src/main/webapp" overwrite="false">
-									<fileset dir="target/cfwheels-${cfwheelsVersion}">
-										<include name="**/*" />
-									</fileset>
-								</move>
+								<unzip src="target/cfwheels.zip" dest="src/main/webapp" overwrite="false" />
 							</target>
 						</configuration>
 						<goals>

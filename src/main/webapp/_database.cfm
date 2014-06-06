@@ -7,6 +7,6 @@
 	</cfquery>
 </cfif>
 <cfquery datasource="webapp">
-	create table users (id int not null identity, name varchar(100), firstname varchar(100), lastname varchar(100), email varchar(255), password varchar(15), PRIMARY KEY(id))
+	create table users (id int not null identity, name varchar(100), firstname varchar(100), lastname varchar(100), email varchar(255), password varchar(32), PRIMARY KEY(id))
 </cfquery>
 Table users is created
