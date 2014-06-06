@@ -1,17 +1,25 @@
 <cfoutput>
+<h1>Create a New user</h1>
 
-<h1>Create a New User</h1>
+#flashMessages()#
+
+#errorMessagesFor("user")#
 
 #startFormTag(action="create")#
 
-    <div>#textField(objectName="user", property="name", label="Name")#</div>
 
-    <div>#textField(objectName="user", property="email", label="Email")#</div>
+        #textField(objectName='user', property='username', label='Username')#
 
-    <div>#passwordField(objectName="user", property="password", label="Password")#</div>
+        #passwordField(objectName='user', property='password', label='Password')#
+        #passwordField(objectName='user', property='passwordConfirmation', label='Confirm Password')#
 
-    <div>#submitTag()#</div>
+        #textField(objectName='user', property='firstname', label='Firstname')#
+
+        #textField(objectName='user', property='lastname', label='Lastname')#
+
+        #submitTag()#
 
 #endFormTag()#
 
+#linkTo(text="Return to the listing", action="index")#
 </cfoutput>
