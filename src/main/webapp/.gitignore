@@ -1,16 +1,12 @@
 /config
-/controllers
 /events
 /files
 /images
 /javascripts
 /lib
 /miscellaneous
-/models
 /plugins
 /stylesheets
-/tests
-/views
 /wheels
 /.htaccess
 /Application.cfc
