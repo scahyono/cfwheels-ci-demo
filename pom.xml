@@ -1,3 +1,22 @@
+<!--
+installing Maven:
+  - on linux: sudo apt-get install maven
+  - other OS: the same as installing CFEclipse plugin on Eclipse IDE
+usage:
+  - "mvn verify" runs all cfwheels app tests on embedded railo and H2 database (use port 8080 for embedded web server)
+     (on Eclipse, Run->Run As->9 Maven install)
+  - Execute "mvn jetty:run" to start the embedded web server to run individual tests
+    (In Eclipse, Run->Run As->6 Maven build...)
+  - Individual tests URL: http://localhost:8080/index.cfm?controller=wheels&action=wheels&view=tests&type=app  
+
+Benefits of embedded-container-test versus full-integration-test
+  #1 clean test data (data is not shared with nor contaminated by other processes)
+  #2 ready for continuous integration (no database or web server required on the CI server)
+  #3 secure (no password necessary to connect to external database server)
+  #4 fast and predictable (all tests run without external network connection)
+  #5 instant result (changes on source code is visible immediately without the need to upload to remote server)
+
+ -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -6,6 +25,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<properties>
+		<!-- embedded CFML and web server version for easy upgrade -->
 		<cfwheelsVersion>1.1.8</cfwheelsVersion>
 		<railoVersion>3.3.5.004</railoVersion>
 		<jettyVersion>8.1.15.v20140411</jettyVersion>
@@ -13,11 +33,13 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<!-- embedded test database runtime, required by railo -->
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2databaseVersion}</version>
 		</dependency>
 		<dependency>
+			<!-- embedded test CFML server runtime -->
 			<groupId>org.getrailo</groupId>
 			<artifactId>railo</artifactId>
 			<version>${railoVersion}</version>
@@ -26,6 +48,7 @@
 	<build>
 		<extensions>
 			<extension>
+				<!-- required to upload package into remote server -->
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-ftp</artifactId>
 				<version>2.6</version>
@@ -37,7 +60,11 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jettyVersion}</version>
 				<configuration>
-					<contextPath>/</contextPath>
+					<webApp>
+						<!-- the URL context path -->
+						<contextPath>/</contextPath>
+					</webApp>
+					<!-- required to allow stopping the server -->
 					<stopPort>9966</stopPort>
 					<stopKey>STOP</stopKey>
 				</configuration>
@@ -48,8 +75,9 @@
 				<version>1.7</version>
 				<executions>
 					<execution>
+						<!-- copy data source and other configuration during test file into local repo -->
 						<id>configure</id>
-						<phase>prepare-package</phase>
+						<phase>test</phase>
 						<configuration>
 							<target>
 								<copy file="src/main/xml/railo-server.xml"
@@ -62,6 +90,7 @@
 						</goals>
 					</execution>
 					<execution>
+						<!-- unzip the zip file during pre-package phase -->
 						<id>unzip-cfwheels</id>
 						<phase>prepare-package</phase>
 						<configuration>
@@ -80,6 +109,7 @@
 	</build>
 	<profiles>
 		<profile>
+			<!-- download specific version of CFWheels framework only if necessary (zip file missing) -->
 			<id>download-cfwheels</id>
 			<activation>
 				<file>
@@ -94,6 +124,7 @@
 						<version>1.0-beta-5</version>
 						<executions>
 							<execution>
+								<!-- download the zip file during test phase before unzip during pre-package phase -->
 								<id>download-cfwheels</id>
 								<phase>test</phase>
 								<goals>
@@ -113,6 +144,7 @@
 	</profiles>
 	<repositories>
 		<repository>
+			<!-- the embedded CFML server only available here to download -->
 			<id>cfmlprojects.org</id>
 			<url>http://cfmlprojects.org/artifacts</url>
 		</repository>
