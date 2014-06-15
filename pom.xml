@@ -56,6 +56,7 @@ Benefits of embedded-container-test versus full-integration-test
 		</extensions>
 		<plugins>
 			<plugin>
+				<!-- embedded web server for testing -->
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jettyVersion}</version>
