@@ -44,7 +44,7 @@ public class CFWheelsAppIT {
 	@Parameters(name="package {0}")
     public static Collection<Object[]> getDirectories() {
     	Collection<Object[]> params = new ArrayList<Object[]>();
-    	addSubDirectories(params, "", "src/main/webapp/tests/");
+    	addSubDirectories(params, "", "tests/");
     	return params;
     }
 
