@@ -7,7 +7,10 @@ usage:
      (on Eclipse, Run->Run As->9 Maven install)
   - Execute "mvn jetty:run" to start the embedded web server to run individual tests
     (In Eclipse, Run->Run As->6 Maven build...)
-  - Individual tests URL: http://localhost:8080/index.cfm?controller=wheels&action=wheels&view=tests&type=app  
+  - individual tests URL: http://localhost:8080/index.cfm?controller=wheels&action=wheels&view=tests&type=app  
+  - zipped final package (with CFWheels without Railo): target/cfwheels-ci-demo-X.Y.Z-SNAPSHOT.war   
+  - "mvn clean" delete WEB-INF, wheels, and target folder to clean up of free up space. 
+    For example, when you want to upgrade Railo or CFWheels version. 
 
 Benefits of embedded-container-test versus full-integration-test
   #1 clean test data (data is not shared with nor contaminated by other processes)
@@ -126,6 +129,20 @@ Benefits of embedded-container-test versus full-integration-test
 							<target>
 								<unzip src="target/cfwheels.zip" dest="."
 									overwrite="false" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<!-- force clean WEB-INF and wheels because it is outside the automatically clean up target folder-->
+						<id>clean railo runtime</id>
+						<phase>clean</phase>
+						<configuration>
+							<target>
+								<delete dir="WEB-INF"/>
+								<delete dir="wheels"/>
 							</target>
 						</configuration>
 						<goals>
