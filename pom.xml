@@ -10,7 +10,9 @@ usage:
   - individual tests URL: http://localhost:8080/index.cfm?controller=wheels&action=wheels&view=tests&type=app  
   - zipped final package (with CFWheels without Railo): target/cfwheels-ci-demo-X.Y.Z-SNAPSHOT.war   
   - "mvn clean" delete WEB-INF, wheels, and target folder to clean up of free up space. 
-    For example, when you want to upgrade Railo or CFWheels version. 
+    For example, when you want to upgrade Railo or CFWheels version.
+Note:
+  - Adapt the datasource name inside railo-server.xml, such as: <datasource name="cfwheels-ci-demo"... 
 
 Benefits of embedded-container-test versus full-integration-test
   #1 clean test data (data is not shared with nor contaminated by other processes)
