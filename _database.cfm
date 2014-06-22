@@ -2,7 +2,7 @@
 	select * from INFORMATION_SCHEMA.TABLES where table_name = 'USERS'
 </cfquery>
 <cfif tableExists.RecordCount gt 1>
-	<cfquery datasource="webapp">
+	<cfquery datasource="#application.wheels.datasourcename#">
 		drop table users
 	</cfquery>
 </cfif>
