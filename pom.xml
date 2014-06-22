@@ -7,7 +7,12 @@ usage:
      (on Eclipse, Run->Run As->9 Maven install)
   - Execute "mvn jetty:run" to start the embedded web server to run individual tests
     (In Eclipse, Run->Run As->6 Maven build...)
-  - Individual tests URL: http://localhost:8080/index.cfm?controller=wheels&action=wheels&view=tests&type=app  
+  - individual tests URL: http://localhost:8080/index.cfm?controller=wheels&action=wheels&view=tests&type=app  
+  - zipped final package (with CFWheels without Railo): target/cfwheels-ci-demo-X.Y.Z-SNAPSHOT.war   
+  - "mvn clean" delete WEB-INF, wheels, and target folder to clean up of free up space. 
+    For example, when you want to upgrade Railo or CFWheels version.
+Note:
+  - Adapt the datasource name inside railo-server.xml, such as: <datasource name="cfwheels-ci-demo"... 
 
 Benefits of embedded-container-test versus full-integration-test
   #1 clean test data (data is not shared with nor contaminated by other processes)
@@ -56,11 +61,39 @@ Benefits of embedded-container-test versus full-integration-test
 		</extensions>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<!-- web.xml is not necessary for final package, only during testing -->
+					<webXml>src/test/xml/web.dummy.xml</webXml>
+					<webResources>
+						<resource>
+							<!-- the sources are in the root, not under src/main/webapp -->
+							<directory>.</directory>
+							<excludes>
+								<exclude>.settings/**</exclude>
+								<exclude>src/**</exclude>
+								<exclude>target/**</exclude>
+								<exclude>WEB-INF/**</exclude>
+								<exclude>.*</exclude>
+								<exclude>pom.xml</exclude>
+							</excludes>
+						</resource>
+					</webResources>
+					<!-- exclude unnecessary binaries from final package -->
+			        <packagingExcludes>WEB-INF/**</packagingExcludes>
+				</configuration>
+			</plugin>
+			<plugin>
 				<!-- embedded web server for testing -->
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jettyVersion}</version>
 				<configuration>
+					<!-- use root source folder. So, file changes can be seen instantly -->
+					<webAppSourceDirectory>.</webAppSourceDirectory>
+					<!-- web.xml required for railo -->
+					<webXml>src/test/xml/web.xml</webXml>
 					<webApp>
 						<!-- the URL context path -->
 						<contextPath>/</contextPath>
@@ -81,7 +114,7 @@ Benefits of embedded-container-test versus full-integration-test
 						<phase>test</phase>
 						<configuration>
 							<target>
-								<copy file="src/main/xml/railo-server.xml"
+								<copy file="src/test/xml/railo-server.xml"
 									tofile="${settings.localRepository}/org/getrailo/railo/${railoVersion}/railo-server/context/railo-server.xml"
 									overwrite="true" />
 							</target>
@@ -96,8 +129,22 @@ Benefits of embedded-container-test versus full-integration-test
 						<phase>prepare-package</phase>
 						<configuration>
 							<target>
-								<unzip src="target/cfwheels.zip" dest="src/main/webapp"
+								<unzip src="target/cfwheels.zip" dest="."
 									overwrite="false" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<!-- force clean WEB-INF and wheels because it is outside the automatically clean up target folder-->
+						<id>clean railo runtime</id>
+						<phase>clean</phase>
+						<configuration>
+							<target>
+								<delete dir="WEB-INF"/>
+								<delete dir="wheels"/>
 							</target>
 						</configuration>
 						<goals>
