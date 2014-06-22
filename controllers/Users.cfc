@@ -1,6 +1,5 @@
 <cfcomponent extends="Controller">
 
-
 	<cffunction name="new">
 		<cfset user = model("user").new()>
 	</cffunction>
@@ -50,6 +49,5 @@
 			success="#user.name# was successfully deleted."
 			)>
 	</cffunction>
-
 
 </cfcomponent>
